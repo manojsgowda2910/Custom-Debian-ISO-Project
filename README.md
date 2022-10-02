@@ -177,15 +177,43 @@ $ apt-get install systemd grub-efi extlinux syslinux mtools console-setup python
 $ pip3 install pyusb pyserial pyftdi
 $ exit
 ```
+With this, you will exit the chroot environment and lb build will finish it’s job by downloading whatever extra it needs and eventually squashing your build into a file system, and then containing it inside an iso file.
+ISO file will be created in the Live-build source root directory.
+
+**Test the Image**  
+Burn the image to USB using either dd command or Balena Etcher and Installer on any Machine or use Virtual machine to test.
+Once the custom build image works, then is Good!!!! we have built our own custom OS that can be installed offline.
+
+**CONSIDERATIONS**  
 
 **Legacy and UEFI Boot:**  
       GRUB supports booting x86 systems via either the traditional BIOS method or more modern UEFI.  
       There are two packages, grub-pc and grub-efi.  
-      If we want to prepare an image with efi support, grub-efi package is to be installed and get rid of the grub-pc package. If we want a classic boot image(BIOS boot), Install grub-pc package and get rid of the grub-efi package. Debian 11 will not let you install both. If we don’t include a boot loader in the packages now, you’ll see that the debian installer from your resulting build not be able to install a boot loader. This is why we include this package here now.
+       - If we want to prepare an image with efi support, grub-efi package is to be installed and get rid of the grub-pc package.  
+       - If we want a classic boot image(BIOS boot), Install grub-pc package and get rid of the grub-efi package. Debian 11 will not let you install both.  
+      If we don’t include a boot loader in the packages now, you’ll see that the debian installer from your resulting build not be able to install a bootloader.           This is why we include this package here now.
       
-Kernel Build:
+**Kernel Upgrade:**  
 You can build and include your own custom kernels. The live-build system does not support kernels not built as .deb packages. The proper and recommended way to deploy your own kernel packages is to follow the instructions in the kernel-handbook. Remember to modify the ABI and flavour suffixes appropriately.
-Kernel package naming convention to be as required by Live-Build.
-for example, linux-image-{ARCHITECTURE}-***
-Build the kernel by giving EXTRAVERSION = amd64
+Kernel package naming convention to be as required by Live-Build standard.  
+for example, linux-image-{ARCHITECTURE}  
+      - Build the kernel by giving EXTRAVERSION as amd64 in Makefile.  
+      - Place the Kernel package in includes.installer folder, so that this package will be installed and available in the ISO filesystem.  
+      - Update the grub during build time using Hook script as below  
+```ruby      
+      Add hook script code here
+```
+**Sources.list update**  
+By default generated image will have sources.list updated with debian security repository.  
+- Shell script to write sources.list content
+- systemd service to run the shell script from boot time. During First boot after OS installation service should be killed by removing the service file using above mentioned shell script.
+- Create a custom debian package to run service file.
 
+**Auto Installation**  
+Full OS installation can be automated with this concept by using preseed.cfg file.  
+Preseeding provides a way to set answers to questions asked during the installation process, without having to manually enter the answers while the installation is running. This makes it possible to fully automate most types of installation and even offers some features not available during normal installations."
+      This can be achieved by placing presedd.cfg file in includes.installer folder.
+Example preseed configuration file is provided for reference.  
+```ruby      
+     cp -r path/to/preseed.cfg config/includes.installer
+```
