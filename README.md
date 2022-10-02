@@ -1,4 +1,4 @@
-**Custom-Debian-ISO-Project**
+# **Custom-Debian-ISO-Project**
 
 Build an Installable Debian 11 Bullseye Image with all possible customization.  
 Objective of this project is to build the custom debian ISO image with all cutomization feature made available.
@@ -7,7 +7,7 @@ Objective of this project is to build the custom debian ISO image with all cutom
 
 It is a framework used to build Debian Live systems and Live Images by themselves.
 
-**Live Build:**
+## **Live Build:**
 
 Command line tool that contains the components to build a live system, I.e. It is a set of scripts completely automated to build debian live images.  
 Using this tool, all aspects of customized building of Live system is possible.
@@ -18,7 +18,7 @@ Live build includes three commands to build image: lb clean, lb config and lb bu
 - **lb config** : populates the configuration directory for live-build. This directory is named 'config' and is created in the current directory where lb config was executed.
 - **lb build:** Command reads the configuration from the config/ directory. It then runs the lower level commands needed to build the Live system.
 
-**Installation and Project Setup:**
+### **Installation and Project Setup:**
 
 - Update and Install live build
 
@@ -42,7 +42,7 @@ Live build includes three commands to build image: lb clean, lb config and lb bu
       $ lb clean
   ```
   
-**Build Configuration:**  
+### **Build Configuration:**  
 
   Issuing "lb config" without any arguments creates the following subdirectories,  
   - auto
@@ -152,7 +152,7 @@ It will create the below shown folder structure in config folder,
 
   <img width="680" alt="image" src="https://user-images.githubusercontent.com/102230689/193446874-49fd5c05-6966-43a1-891f-71b0f461e675.png">
 
-**Build - Live and Installer image**  
+### **Build - Live and Installer image**  
 
 Run live build
 ```ruby
@@ -184,7 +184,7 @@ ISO file will be created in the Live-build source root directory.
 Burn the image to USB using either dd command or Balena Etcher and Installer on any Machine or use Virtual machine to test.
 Once the custom build image works, then is Good!!!! we have built our own custom OS that can be installed offline.
 
-**CONSIDERATIONS**  
+### **CONSIDERATIONS**  
 
 **Legacy and UEFI Boot:**  
       GRUB supports booting x86 systems via either the traditional BIOS method or more modern UEFI.  
