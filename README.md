@@ -105,6 +105,7 @@ Below example is for my Custom OS requirment, Please refer Debian Live Manual to
       --system live \
       --interactive shell \
       --bootappend-live "boot=live components persistence persistence-encryption=luks console=tty1 console=ttyS0,115200" \
+      --bootappend-install "boot=components console=tty1 console=ttyS0,115200" \
       --bootloaders grub-efi \
       --binary-image iso-hybrid \
       --debian-installer live \
@@ -135,21 +136,56 @@ Below example is for my Custom OS requirment, Please refer Debian Live Manual to
 
 ```
 Above config file is implemnted to create OS as in below major configuration details,  
- - Debian 11 Bullseye and Linux Kernel 5.15.59
+ - Debian 11 Bullseye
+ - Custom Linux Kernel 5.15.59
  - Full Disk Encryption
- - UEFI support
+ - UEFI support (grub-efi)
+ - amd64 (64 bit architecture)
+ - Interactive shell (To install packages during build time)
+ - Serial Console support
+ - Custom systemd Service
+ - Package Installation 
+ - Auto installation
+ - Files on the ISO filesystem
 
 It will create the below shown folder structure in config folder,
 
   <img width="680" alt="image" src="https://user-images.githubusercontent.com/102230689/193446874-49fd5c05-6966-43a1-891f-71b0f461e675.png">
 
-**Build - Live and Installer image** 
+**Build - Live and Installer image**  
+
 Run live build
 ```ruby
       $ lb build
 ```
-This command runs as four stages,
-- Bootstrap stage
-- Chroot stage
-- Binary stage
-- Source stage
+The build process is divided into stages, with various customizations applied in sequence in each.  
+      - Bootstrap stage  
+      - Chroot stage  
+      - Binary stage  
+      - Source stage 
+
+- **Bootstrap Stage:** This is the initial phase of populating the chroot directory with packages to make a barebones Debian system.  
+- **Chroot stage:** In this stage preseeds are applied before any packages are installed, packages are installed before any locally included files are copied, and hooks are run later, after all of the materials are in place. Most customization of content occurs in this stage.  
+- **Binary stage:** Builds a bootable image, using the contents of the chroot directory to construct the root filesystem for the Live system, and including the installer and any other additional material on the target medium outside of the Live system's filesystem.  
+- **Source stage:** Source puts it into a bootable ISO image. 
+
+**Interactive Shell:**
+Install required packages to the ISO filesystem during image bulding time. Once the Interactive shell appears pass the installation command,  
+For example,
+```ruby
+$ apt-get install systemd grub-efi extlinux syslinux mtools console-setup python3 python3-pip network-manager ethtool speedtest-cli cryptsetup-initramfs fdisk initramfs-tools rapidjson-dev ntp openssh-server iptables squashFS luks tpm2-brmd tmp2-tools netfilter-persistent auditd ntp watchdog AppArmor openssh-server sudo Python 3.10 rsync
+$ pip3 install pyusb pyserial pyftdi
+$ exit
+```
+
+**Legacy and UEFI Boot:**  
+      GRUB supports booting x86 systems via either the traditional BIOS method or more modern UEFI.  
+      There are two packages, grub-pc and grub-efi.  
+      If we want to prepare an image with efi support, grub-efi package is to be installed and get rid of the grub-pc package. If we want a classic boot image(BIOS boot), Install grub-pc package and get rid of the grub-efi package. Debian 11 will not let you install both. If we don’t include a boot loader in the packages now, you’ll see that the debian installer from your resulting build not be able to install a boot loader. This is why we include this package here now.
+      
+Kernel Build:
+You can build and include your own custom kernels. The live-build system does not support kernels not built as .deb packages. The proper and recommended way to deploy your own kernel packages is to follow the instructions in the kernel-handbook. Remember to modify the ABI and flavour suffixes appropriately.
+Kernel package naming convention to be as required by Live-Build.
+for example, linux-image-{ARCHITECTURE}-***
+Build the kernel by giving EXTRAVERSION = amd64
+
