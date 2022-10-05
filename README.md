@@ -15,7 +15,7 @@ Using this tool, all aspects of customized building of Live system is possible.
 Live build includes three commands to build image: lb clean, lb config and lb build
 
 - **lb clean:** Responsible for cleaning up after system is built. It removes the build directories and remove other files including stage files.
-- **lb config** : populates the configuration directory for live-build. This directory is named 'config' and is created in the current directory where lb config was executed.
+- **lb config:** populates the configuration directory for live-build. This directory is named 'config' and is created in the current directory where lb config was executed.
 - **lb build:** Command reads the configuration from the config/ directory. It then runs the lower level commands needed to build the Live system.
 
 ### **Installation and Project Setup:**
@@ -34,7 +34,7 @@ Live build includes three commands to build image: lb clean, lb config and lb bu
 ```
 
 
-- Create a folder to debian live project to keep all files in one place and enter to source directory with all root previlages.
+- Create a folder to debian live project to keep all files in one place and enter to source directory with all root privileges.
 
  ```ruby
       $ mkdir custom-debian
@@ -95,7 +95,7 @@ Edit auto/config,. For instance:
 ```ruby
       $ nano auto/config
 ```
-Below example is for my Custom OS requirment, Please refer Debian Live Manual to customize according to user requirment,
+Below example is for my Custom OS requirement, please refer Debian Live Manual to customize according to user requirement,
 ```ruby
       #!/bin/sh
       set -e
@@ -135,7 +135,7 @@ Below example is for my Custom OS requirment, Please refer Debian Live Manual to
       "${@}"
 
 ```
-Above config file is implemnted to create OS as in below major configuration details,  
+Above config file is implemented to create OS as in below major configuration details,  
  - Debian 11 Bullseye
  - Custom Linux Kernel 5.15.59
  - Full Disk Encryption
@@ -170,7 +170,7 @@ The build process is divided into four stages, with various customizations appli
 - **Source stage:** Source puts it into a bootable ISO image. 
 
 **Interactive Shell:**
-Install required packages to the ISO filesystem during image bulding time. Once the Interactive shell appears pass the installation command,  
+Install required packages to the ISO filesystem during image buiding time. Once the Interactive shell appears pass the installation command,  
 For example,
 ```ruby
 $ apt-get install systemd grub-efi extlinux syslinux mtools console-setup python3 python3-pip network-manager ethtool speedtest-cli cryptsetup-initramfs fdisk initramfs-tools rapidjson-dev ntp openssh-server iptables squashFS luks tpm2-brmd tmp2-tools netfilter-persistent auditd ntp watchdog AppArmor openssh-server sudo Python 3.10 rsync
