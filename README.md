@@ -1,7 +1,7 @@
 # **Custom-Debian-ISO-Project**
 
 Build an Installable Debian 11 Bullseye Image with all possible customization.  
-Objective of this project is to build the custom debian ISO image with all cutomization feature made available.
+Objective of this project is to build the custom debian ISO image with all customization feature made available.
 
 **Debian Live Project:**
 
@@ -158,7 +158,7 @@ Run live build
 ```ruby
       $ lb build
 ```
-The build process is divided into stages, with various customizations applied in sequence in each.  
+The build process is divided into four stages, with various customizations applied in sequence in each.  
       - Bootstrap stage  
       - Chroot stage  
       - Binary stage  
@@ -199,9 +199,12 @@ Kernel package naming convention to be as required by Live-Build standard.
 for example, linux-image-{ARCHITECTURE}  
       - Build the kernel by giving EXTRAVERSION as amd64 in Makefile.  
       - Place the Kernel package in includes.installer folder, so that this package will be installed and available in the ISO filesystem.  
-      - Update the grub during build time using Hook script as below  
+      - Bullseye doesn't build initramfs for custom kernels. This can be achieved Using hooks scripts workaround, which is efficient. 
 ```ruby      
-      Add hook script code here
+      #!/bin/sh
+      set -e
+      #Build initramfs
+      mkinitramfs -o /boot/initrd.img-5.16.1-amd64 
 ```
 **Sources.list update**  
 By default generated image will have sources.list updated with debian security repository.  
