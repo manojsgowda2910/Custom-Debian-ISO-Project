@@ -30,7 +30,7 @@ Live build includes three commands to build image: lb clean, lb config and lb bu
 - Prerequisites package to be installed,
 
 ```ruby
-      $ apt-get install squashfs-tools live-boot live-config live-boot-initramfs-tools live-config-sysvinit libburn4 libjte1 libisofs6 libisoburn1 xorriso isolinux
+      $ apt-get install squashfs-tools live-boot live-config live-boot-initramfs-tools live-config-sysvinit xorriso isolinux
 ```
 
 
